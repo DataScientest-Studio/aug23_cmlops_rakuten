@@ -21,7 +21,8 @@ Le projet suit un plan en plusieurs étapes :
   * Réseau de neurones convolutifs (CNN (Resnet50)) pour la classification d'images,
   * Réseaux de neurones récurrents (RNN (BERT)) pour la classification de texte.
 * Modèle de fusion, concatenation d'un modèle textuel (BERT) et d'un modèle image (Resnet50).
-* Isolation du projet, 
+* Isolation du projet, déploiement du modèle de Deeplearning.
+* Amélioration de la vitesse de réponse du modèle déployé.
 * Evolutions possibles du modèle.
   
 ## **README**
