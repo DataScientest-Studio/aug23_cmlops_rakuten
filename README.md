@@ -1,54 +1,48 @@
-# ProjectTemplate
+# **Challenge_Rakuten_py**
 
-## Explanations and Instructions
+## Presentation et Installation
+Ce projet s’inscrit dans le challenge Rakuten France Multimodal Product Data Classification: Il s’agit de prédire le code type de produits (tel que défini dans le catalogue Rakuten France) à partir d’une description texte et d’une image.
 
-This repository contains the files needed to initialize a project for your [DataScientest](https://datascientest.com/) training.
+Rakuten France souhaite pouvoir catégoriser ses produits automatiquement grâce à la désignation, la description et les images des produits vendus sur son site.
 
-It contains mainly the present README.md file and an application template [Streamlit](https://streamlit.io/).
+Ce projet a été développé pendant notre formation Data scientist avec le centre de formation Datascientest (https://datascientest.com/)
 
-**README**
+Notre équipe de développement du projet était composée de:
+  * Flavien SAUX ([GitHub](https://github.com/Flav63s) / [LinkedIn](https://www.linkedin.com/in/flavien-s-712596190/))
+  * Patricia WINTREBERT ([GitHub](https://github.com/patw47) / [LinkedIn](https://www.linkedin.com/in//))
+  * Mimoune LOUARRADI ([GitHub](https://github.com/mlouarra) / [LinkedIn](https://www.linkedin.com/in//))
+  * Michaël DEVAUX ([GitHub](https://github.com/MichaelD24) / [LinkedIn](https://www.linkedin.com/in/michaël-devaux-362760139/))
 
-The README.md file is a central element of any git repository. It allows you to present your project, its objectives, and to explain how to install and launch the project, or even how to contribute to it.
+## Déroulement du projet
+Le projet suit un plan en plusieurs étapes :
 
-You will have to modify different sections of this README.md to include the necessary informations.
+* Collecte, exploration et préparation des données.
+* Modélisation d'algorithmes de Deep Learning avec TensorFlow:
+  * Réseau de neurones convolutifs (CNN (Resnet50)) pour la classification d'images,
+  * Réseaux de neurones récurrents (RNN (BERT)) pour la classification de texte.
+* Modèle de fusion, concatenation d'un modèle textuel (BERT) et d'un modèle image (Resnet50).
+* Isolation du projet, 
+* Evolutions possibles du modèle.
+  
+## **README**
 
-- Complete the sections (`## Presentation and Installation` `## Streamlit App`) following the instructions in these sections.
-- Delete this section (`## Explanations and Instructions`)
-
-**Streamlit Application**
-
-A [Streamlit] application template (https://streamlit.io/) is available in the [streamlit_app](streamlit_app) folder. You can use this template to start with your project.
-
-## Presentation and Installation
-
-Complete this section with a brief description of your project, the context (including a link to the DataScientest course), and the objectives.
-
-You can also add a brief presentation of the team members with links to your respective networks (GitHub and/or LinkedIn for example).
-
-**Example:**
-
-This repository contains the code for our project **PROJECT_NAME**, developed during our [Data Scientist training](https://datascientest.com/en/data-scientist-course) at [DataScientest](https://datascientest.com/).
-
-The goal of this project is to **...**
-
-This project was developed by the following team :
-
-- John Doe ([GitHub](https://github.com/) / [LinkedIn](http://linkedin.com/))
-- Martin Dupont ([GitHub](https://github.com/) / [LinkedIn](http://linkedin.com/))
-
-You can browse and run the [notebooks](./notebooks). 
-
-You will need to install the dependencies (in a dedicated environment) :
-
-```
-pip install -r requirements.txt
-```
+Nous n'avons pas pu télécharger les données nécessaires sur GitHub, pour que vous puissiez refaire ce projet dans les mêmes conditions que nous.
+Ces dernières étaient trop volumineuses pour être acceuillies sur notre espace.
+Cependant, vous pouvez les télécharger sur le site [challengedata](https://challengedata.ens.fr/challenges/35).
+Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants les données.
+* X_train_update.csv
+* X_test_update.csv
+* Y_train_CVw08PX.csv
+* Le dossier contenant toutes les images
+Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
 
 ## Streamlit App
 
-**Add explanations on how to use the app.**
-
-To run the app (be careful with the paths of the files in the app):
+**Installation de Streamlit.**
+```
+pip install -r requirements.txt
+```
+Pour exécuter l'application (attention aux chemins des fichiers dans l'application) :
 
 ```shell
 conda create --name my-awesome-streamlit python=3.9
@@ -58,3 +52,4 @@ streamlit run app.py
 ```
 
 The app should then be available at [localhost:8501](http://localhost:8501).
+
