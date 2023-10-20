@@ -21,7 +21,16 @@ Le projet suit un plan en plusieurs étapes :
   * Réseau de neurones convolutifs (CNN (Resnet50)) pour la classification d'images,
   * Réseaux de neurones récurrents (RNN (BERT)) pour la classification de texte.
 * Modèle de fusion, concatenation d'un modèle textuel (BERT) et d'un modèle image (Resnet50).
-* Isolation du projet, déploiement du modèle de Deeplearning.
+* Création d'une API avec 8 endpoints:
+  * Authentification des utilisateurs/administrateurs,
+  * Interroger la base de données,
+  * Obtention des prédictions du modèle pour le traitement de texte,
+  * obtention des prédictions du modèle pour le traitement des images,
+  * obtention des prédictions du modèle pour le traitement des combinaisons textes/images (fusion),
+  * écriture dans les logs.
+  * mise à jour de la base de données.
+  * mise à jour/réentrainement du modèle si nécessaire.
+* Isolation du projet via la création de contenaires Dockers, pilotage et déploiement du modèle de Deeplearning via Kubernetes.
 * Amélioration de la vitesse de réponse du modèle déployé.
 * Evolutions possibles du modèle.
   
