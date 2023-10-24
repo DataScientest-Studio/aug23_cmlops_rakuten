@@ -5,7 +5,7 @@ Ce projet s’inscrit dans le challenge Rakuten France Multimodal Product Data C
 
 Rakuten France souhaite pouvoir catégoriser ses produits automatiquement grâce à la désignation, la description et les images des produits vendus sur son site.
 
-Ce projet a été développé pendant notre formation Data scientist avec le centre de formation Datascientest (https://datascientest.com/)
+Ce projet a été développé pendant notre formation de MLops avec le centre de formation Datascientest (https://datascientest.com/)
 
 Notre équipe de développement du projet était composée de:
   * Flavien SAUX ([GitHub](https://github.com/Flav63s) / [LinkedIn](https://www.linkedin.com/in/flavien-s-712596190/))
