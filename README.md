@@ -21,7 +21,8 @@ Le projet suit un plan en plusieurs étapes :
   * Réseau de neurones convolutifs (CNN (Resnet50)) pour la classification d'images,
   * Réseaux de neurones récurrents (RNN (BERT)) pour la classification de texte.
 * Modèle de fusion, concatenation d'un modèle textuel (BERT) et d'un modèle image (Resnet50).
-* Création d'une API avec 8 endpoints:
+* Création d'une API avec 9 endpoints:
+  * Le Main
   * Authentification des utilisateurs/administrateurs,
   * Interroger la base de données,
   * Obtention des prédictions du modèle pour le traitement de texte,
@@ -46,20 +47,5 @@ Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants l
 * Le dossier contenant toutes les images
 Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
 
-## Streamlit App
-
-**Installation de Streamlit.**
-```
-pip install -r requirements.txt
-```
-Pour exécuter l'application (attention aux chemins des fichiers dans l'application) :
-
-```shell
-conda create --name my-awesome-streamlit python=3.9
-conda activate my-awesome-streamlit
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-The app should then be available at [localhost:8501](http://localhost:8501).
-
+## **API**
+# API en cours de construction
