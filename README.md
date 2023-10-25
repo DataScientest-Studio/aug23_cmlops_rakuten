@@ -48,33 +48,33 @@ Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants l
 Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
 
 ## **API**
-   # API de Classification de Produits
+   ### API de Classification de Produits
 
 Bienvenue dans l'API de Classification de Produits. Cette API permet de classer un produit en fonction d'une image et d'une description textuelle.
 
-   ## Installation
+   ### Installation
 
 1. Assurez-vous d'avoir Python 3.9 ou une version ultérieure installée.
 
 2. Clonez ce dépôt Git sur votre ordinateur :
 
    ```bash
-   git clone https://github.com/DataScientest-Studio/aug23_cmlops_rakuten.git```
+   git clone https://github.com/DataScientest-Studio/aug23_cmlops_rakuten.git
 
 3. Accédez au répertoire du projet :
    
    ```bash
-   cd aug23_cmlops_rakuten```
+   cd aug23_cmlops_rakuten
    
 4. Installez les dépendances :
 
    ```bash
-   pip install -r requirements.txt```
+   pip install -r requirements.txt
 
 5. Lancez l'API à l'aide de la commande suivante :
 
    ```bash
-   uvicorn main:app --reload```
+   uvicorn main:app --reload
 
    L'API sera disponible à l'adresse http://127.0.0.1:8000.
    
@@ -85,7 +85,7 @@ Bienvenue dans l'API de Classification de Produits. Cette API permet de classer 
    Vous pouvez aussi faire une requête par le terminal via l'outil Curl :
 
    ```bash
-   curl -X POST "http://127.0.0.1:8000/predict" -F "text=Description du produit" -F "image=@chemin/vers/image.jpg"```
+   curl -X POST "http://127.0.0.1:8000/predict" -F "text=Description du produit" -F "image=@chemin/vers/image.jpg"
 
    Vous devez remplacer "Description du produit" par la description de votre produit et "chemin/vers/image.jpg" par le chemin de l'image du produit.
 
