@@ -26,8 +26,8 @@ Le projet suit un plan en plusieurs étapes :
   * Authentification des utilisateurs/administrateurs,
   * Interroger la base de données,
   * Obtention des prédictions du modèle pour le traitement de texte,
-  * obtention des prédictions du modèle pour le traitement des images,
-  * obtention des prédictions du modèle pour le traitement des combinaisons textes/images (fusion),
+  * Obtention des prédictions du modèle pour le traitement des images,
+  * Obtention des prédictions du modèle pour le traitement des combinaisons textes/images (fusion),
   * écriture dans les logs.
   * mise à jour de la base de données.
   * mise à jour/réentrainement du modèle si nécessaire.
@@ -35,7 +35,7 @@ Le projet suit un plan en plusieurs étapes :
 * Amélioration de la vitesse de réponse du modèle déployé.
 * Evolutions possibles du modèle.
   
-## **README**
+## **Base de données**
 
 Nous n'avons pas pu télécharger les données nécessaires sur GitHub, pour que vous puissiez refaire ce projet dans les mêmes conditions que nous.
 Ces dernières étaient trop volumineuses pour être acceuillies sur notre espace.
@@ -48,4 +48,48 @@ Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants l
 Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
 
 ## **API**
-# API en cours de construction
+   # API de Classification de Produits
+
+Bienvenue dans l'API de Classification de Produits. Cette API permet de classer un produit en fonction d'une image et d'une description textuelle.
+
+   ## Installation
+
+1. Assurez-vous d'avoir Python 3.9 ou une version ultérieure installée.
+
+2. Clonez ce dépôt Git sur votre ordinateur :
+
+   ```bash
+   git clone https://github.com/DataScientest-Studio/aug23_cmlops_rakuten.git```
+
+3. Accédez au répertoire du projet :
+   
+   ```bash
+   cd aug23_cmlops_rakuten```
+   
+4. Installez les dépendances :
+
+   ```bash
+   pip install -r requirements.txt```
+
+5. Lancez l'API à l'aide de la commande suivante :
+
+   ```bash
+   uvicorn main:app --reload```
+
+   L'API sera disponible à l'adresse http://127.0.0.1:8000.
+   
+6. Pour effectuer une classification de produit, utilisez un client HTTP ou un navigateur Web pour envoyer une requête POST à l'URL suivante : http://127.0.0.1:8000/predict.
+
+   Vous devrez inclure une image et une description textuelle dans la requête.
+
+   Vous pouvez aussi faire une requête par le terminal via l'outil Curl :
+
+   ```bash
+   curl -X POST "http://127.0.0.1:8000/predict" -F "text=Description du produit" -F "image=@chemin/vers/image.jpg"```
+
+   Vous devez remplacer "Description du produit" par la description de votre produit et "chemin/vers/image.jpg" par le chemin de l'image du produit.
+
+   L'API renverra la catégorie prdtypecode et la thématique du produit.
+
+
+
