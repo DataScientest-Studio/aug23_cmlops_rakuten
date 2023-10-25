@@ -75,8 +75,8 @@ Bienvenue dans l'API de Classification de Produits. Cette API permet de classer 
 
    ```bash
    uvicorn main:app --reload
-
-   L'API sera disponible à l'adresse http://127.0.0.1:8000.
+   ```
+L'API sera disponible à l'adresse http://127.0.0.1:8000.
    
  ## Effectuer une classification de produit
 
