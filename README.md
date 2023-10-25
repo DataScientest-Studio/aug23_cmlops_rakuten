@@ -48,11 +48,11 @@ Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants l
 Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
 
 ## **API**
-   ### API de Classification de Produits
+   ## API de Classification de Produits
 
 Bienvenue dans l'API de Classification de Produits. Cette API permet de classer un produit en fonction d'une image et d'une description textuelle.
 
-   ### Installation
+   ## Installation
 
 1. Assurez-vous d'avoir Python 3.9 ou une version ultérieure installée.
 
@@ -78,18 +78,20 @@ Bienvenue dans l'API de Classification de Produits. Cette API permet de classer 
 
    L'API sera disponible à l'adresse http://127.0.0.1:8000.
    
-6. Pour effectuer une classification de produit, utilisez un client HTTP ou un navigateur Web pour envoyer une requête POST à l'URL suivante : http://127.0.0.1:8000/predict.
+ ## Effectuer une classification de produit
 
-   Vous devrez inclure une image et une description textuelle dans la requête.
+ Utilisez un client HTTP ou un navigateur Web pour envoyer une requête POST à l'URL suivante : http://127.0.0.1:8000/predict.
 
-   Vous pouvez aussi faire une requête par le terminal via l'outil Curl :
+ Vous devrez inclure une image et une description textuelle dans la requête.
+
+ Vous pouvez aussi faire une requête par le terminal via l'outil Curl :
 
    ```bash
    curl -X POST "http://127.0.0.1:8000/predict" -F "text=Description du produit" -F "image=@chemin/vers/image.jpg"
 
-   Vous devez remplacer "Description du produit" par la description de votre produit et "chemin/vers/image.jpg" par le chemin de l'image du produit.
+Vous devez remplacer "Description du produit" par la description de votre produit et "chemin/vers/image.jpg" par le chemin de l'image du produit.
 
-   L'API renverra la catégorie prdtypecode et la thématique du produit.
+L'API renverra la catégorie prdtypecode et la thématique du produit.
 
 
 
