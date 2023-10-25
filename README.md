@@ -88,6 +88,7 @@ L'API sera disponible à l'adresse http://127.0.0.1:8000.
 
    ```bash
    curl -X POST "http://127.0.0.1:8000/predict" -F "text=Description du produit" -F "image=@chemin/vers/image.jpg"
+   ```
 
 Vous devez remplacer "Description du produit" par la description de votre produit et "chemin/vers/image.jpg" par le chemin de l'image du produit.
 
