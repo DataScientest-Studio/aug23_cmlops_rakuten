@@ -10,7 +10,7 @@ Ce projet a été développé pendant notre formation de MLops avec le centre de
 Notre équipe de développement du projet était composée de:
   * Flavien SAUX ([GitHub](https://github.com/Flav63s) / [LinkedIn](https://www.linkedin.com/in/flavien-s-712596190/))
   * Patricia WINTREBERT ([GitHub](https://github.com/patw47) / [LinkedIn](https://www.linkedin.com/in/patriciawintrebert/))
-  * Mimoune LOUARRADI ([GitHub](https://github.com/mlouarra) / [LinkedIn](https://www.linkedin.com/in/louarradi-mimoune-4a4b1012/)
+  * Mimoune LOUARRADI ([GitHub](https://github.com/mlouarra) / [LinkedIn](https://www.linkedin.com/in/louarradi-mimoune-4a4b1012/))
   * Michaël DEVAUX ([GitHub](https://github.com/MichaelD24) / [LinkedIn](https://www.linkedin.com/in/michaël-devaux-362760139/))
 
 ## Déroulement du projet
