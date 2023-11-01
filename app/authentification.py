@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 import jwt
 from datetime import datetime, timedelta
 from jwt.exceptions import DecodeError
+from log import logger
 
 SECRET_KEY = "my_secret_key"
 ALGORITHM = "HS256"
@@ -59,8 +60,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             raise credentials_exception
         token_data = TokenData(username=username)
     except DecodeError:
+        logger.info('Failed login attempt using token: {}'.format(token))  # Log the failed attempt
+
         raise credentials_exception
     user = get_user(fake_users_db, username=token_data.username)
     if user is None:
         raise credentials_exception
+    logger.info('Successful login for user: {}'.format(username))  # Log the successful login
     return user
