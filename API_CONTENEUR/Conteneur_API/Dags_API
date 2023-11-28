@@ -5,12 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 import os
 import shutil
 
-def retrieve_and_save_data(**kwargs):
-    # Votre logique pour récupérer les données de texte et d'image
-    # et les sauvegarder dans un fichier temporaire.
-    text_data = "Contenu du texte"
-    image_data = "Contenu de l'image"
-    
+def retrieve_and_save_data(text_data, image_data):
     temp_dir = "/path/to/temp/directory"
     temp_text_path = os.path.join(temp_dir, "temp_text.txt")
     temp_image_path = os.path.join(temp_dir, "temp_image.jpg")
@@ -21,12 +16,37 @@ def retrieve_and_save_data(**kwargs):
     with open(temp_image_path, "wb") as image_file:
         image_file.write(image_data)
 
-    return temp_text_path, temp_image_path
+    # Prédiction
+    prdtypecode, thematique = predict(text_data, temp_image_path)
 
-def validate_data(**kwargs):
+    return temp_text_path, temp_image_path, prdtypecode, thematique
+
+def validate_and_integrate_data(prediction_result, target_csv_dir="/path/to/training/csv"):
+    temp_text_path, temp_image_path, prdtypecode, thematique = prediction_result
+
     # Logique pour la validation par l'administrateur
-    # Peut inclure des notifications ou des actions spécifiques
-    return True  # Pour l'exemple, considérons que la validation est réussie
+    # Vous pouvez remplacer la logique ci-dessous par vos propres conditions de validation
+    is_validation_successful = True
+
+    if is_validation_successful:
+        # Si la validation est réussie, renvoyez le résultat de la prédiction
+        target_text_path = os.path.join(target_csv_dir, "new_data_text.txt")
+        target_image_path = os.path.join(target_csv_dir, "new_data_image.jpg")
+
+        # Déplacez ou copiez les fichiers vers le dossier d'entraînement
+        shutil.move(temp_text_path, target_text_path)
+        shutil.move(temp_image_path, target_image_path)
+
+        return {"prdtypecode": prdtypecode, "thematique": thematique, "message": "Validation réussie. Données intégrées."}
+    else:
+        # Si la validation échoue, vous pouvez prendre des mesures spécifiques ou renvoyer None
+        # Dans cet exemple, les fichiers temporaires ne sont pas déplacés, vous pouvez les supprimer si nécessaire
+        if os.path.exists(temp_text_path):
+            os.remove(temp_text_path)
+        if os.path.exists(temp_image_path):
+            os.remove(temp_image_path)
+
+        return {"message": "Validation échouée. Données supprimées."} 
 
 def integrate_data(**kwargs):
     # Logique pour intégrer les données dans le dossier CSV d'entraînement
@@ -50,9 +70,9 @@ default_args = {
 }
 
 dag = DAG(
-    'rakuten_data_integration',
+    'RECUP_DATA',
     default_args=default_args,
-    schedule_interval=None,  # À définir selon vos besoins
+    schedule_interval=timedelta(weeks=1),  # Déclenchez chaque semaine
 )
 
 # Tâche pour récupérer et sauvegarder les données
