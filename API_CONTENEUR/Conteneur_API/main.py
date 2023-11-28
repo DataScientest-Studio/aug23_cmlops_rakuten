@@ -2,15 +2,17 @@ from fastapi import FastAPI, HTTPException, Depends, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from typing import Optional
+from airflow.api.client.local_client import Client
+from datetime import datetime, timedelta
 import httpx
 import jwt
 import uuid
 import os
-
 from script_de_prediction import predict
 
 app = FastAPI(title='RAKUTEN API')
-
+# App Airflow
+client = Client(api_base_url='http://localhost:8080/api/v1')
 # URL du service d'authentification
 AUTH_SERVICE_URL = "http://users-db:8001/auth"
 # Clé secrète utilisée pour décoder le token JWT
