@@ -2,9 +2,9 @@ name: FastAPI Auth Route Test
 
 on:
   push:
-    branches: [ Conteneurs_app ] 
+    branches: [ main ] 
   pull_request:
-    branches: [ Conteneurs_app ]  
+    branches: [ main ]  
 
 jobs:
   test-auth-route:
