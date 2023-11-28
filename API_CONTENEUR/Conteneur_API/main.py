@@ -94,5 +94,13 @@ async def predict_endpoint(token: str = Depends(get_token), text: str = Form(...
     else:
         raise HTTPException(status_code=400, detail="Image file is missing")
 
-
+    execution_date = datetime.utcnow()
+    dag_trigger_response = client.trigger_dag(
+        dag_id='nom_de_votre_dag',
+        run_id=f"predict_run_{execution_date}",
+        conf={'text': text, 'image_path': temp_image_path, 'token': token},
+        execution_date=execution_date,
+    )
+    
+    return JSONResponse(content={"message": "Prédiction réussie. DAG déclenché."})
 
