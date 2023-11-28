@@ -1,0 +1,53 @@
+# Spécifie la version de la syntaxe Docker Compose utilisée.
+version: '3.8'
+
+# Déclare les services qui font partie de cette application.
+services:
+  # Définition du service pour l'API.
+  api:
+    build:
+      context: ./Conteneur_API
+      # Chemin vers le Dockerfile pour construire l'image du service API.
+      dockerfile: ../Dockerfile/API/Dockerfile
+    ports:
+      - "8000:8000"  # Fait correspondre le port 8000 du conteneur au port 8000 de l'hôte.
+    volumes:
+      # Montage d'un volume pour accéder au modèle depuis l'hôte.
+      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/combined_model_trained_after_resume.h5:/app/models/combined_model_trained_after_resume.h5
+    networks:
+      - my-network  # Connecte ce service au réseau 'my-network'.
+
+  # Définition du service pour la base de données utilisateurs.
+  users-db:
+    build:
+      context: ./Conteneur_BDD_utilisateur
+      dockerfile: ../Dockerfile/BDD_utilisateur/Dockerfile
+    ports:
+      - "8001:8001"  # Port du service base de données utilisateurs.
+    networks:
+      - my-network
+
+  # Définition du service pour l'entraînement.
+  entrainement:
+    build:
+      context: ./Conteneur_Entrainement
+      dockerfile: ../Dockerfile/Entrainement/Dockerfile
+    ports:
+      - "5001:5001"  # Port du service d'entraînement.
+    volumes:
+      # Montage de volumes pour accéder aux données d'entraînement.
+      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data/224_X_Train_4D.npy
+      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/Df_Encoded_test.csv:/app/data/Df_Encoded_test.csv
+    networks:
+      - my-network
+
+# Déclaration et configuration du réseau utilisé par les services.
+networks:
+  my-network:
+    driver: bridge  # Utilise le driver 'bridge' pour la communication entre les conteneurs.
+
+
+
+
+
+  
