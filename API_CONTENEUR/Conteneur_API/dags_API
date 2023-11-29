@@ -99,6 +99,6 @@ integrate_data_task = PythonOperator(
 
 
 )
-retrieve_data_task >> validate_data_task >> integrate_data_task
+
 # Définissez l'ordre des tâches
 retrieve_data_task >> validate_data_task >> integrate_data_task
