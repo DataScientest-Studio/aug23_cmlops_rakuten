@@ -31,10 +31,16 @@ def validate_and_integrate_data(prediction_result, target_csv_dir="/path/to/trai
         # Si la validation est réussie, renvoyez le résultat de la prédiction
         target_text_path = os.path.join(target_csv_dir, "new_data_text.txt")
         target_image_path = os.path.join(target_csv_dir, "new_data_image.jpg")
+        target_csv_path = os.path.join(target_csv_dir, "training_data.csv")
 
         # Déplacez ou copiez les fichiers vers le dossier d'entraînement
         shutil.move(temp_text_path, target_text_path)
         shutil.move(temp_image_path, target_image_path)
+
+         # Ajoutez les informations dans le fichier CSV
+        with open(target_csv_path, "a", newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow([text_data, target_image_path, prdtypecode, thematique])
 
         return {"prdtypecode": prdtypecode, "thematique": thematique, "message": "Validation réussie. Données intégrées."}
     else:
