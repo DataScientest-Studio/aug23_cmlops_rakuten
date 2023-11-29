@@ -24,8 +24,7 @@ def retrieve_and_save_data(text_data, image_data):
 def validate_and_integrate_data(prediction_result, target_csv_dir="/path/to/training/csv"):
     temp_text_path, temp_image_path, prdtypecode, thematique = prediction_result
 
-    # Logique pour la validation par l'administrateur
-    # Vous pouvez remplacer la logique ci-dessous par vos propres conditions de validation
+
     is_validation_successful = True
 
     if is_validation_successful:
@@ -97,7 +96,9 @@ integrate_data_task = PythonOperator(
     python_callable=integrate_data,
     provide_context=True,
     dag=dag,
-)
 
+
+)
+retrieve_data_task >> validate_data_task >> integrate_data_task
 # Définissez l'ordre des tâches
 retrieve_data_task >> validate_data_task >> integrate_data_task
