@@ -82,7 +82,7 @@ async def predict_endpoint(token: str = Depends(get_token), text: str = Form(...
     payload = verify_token(token)
 
     if image:
-        temp_image_path = "temp_image_" + str(uuid.uuid4()) + ".jpg"
+        temp_image_path = "/app/temp/temp_image_" + str(uuid.uuid4()) + ".jpg"
         try:
             image_contents = await image.read()
             with open(temp_image_path, "wb") as f:
