@@ -6,7 +6,7 @@ import os
 import shutil
 
 def retrieve_and_save_data(text_data, image_data):
-    temp_dir = "/path/to/temp/directory"
+    temp_dir = "/app/temp"
     temp_text_path = os.path.join(temp_dir, "temp_text.txt")
     temp_image_path = os.path.join(temp_dir, "temp_image.jpg")
 
@@ -58,7 +58,7 @@ def integrate_data(**kwargs):
     temp_text_path = kwargs['ti'].xcom_pull(task_ids='retrieve_data_task')[0]
     temp_image_path = kwargs['ti'].xcom_pull(task_ids='retrieve_data_task')[1]
 
-    target_csv_dir = "/path/to/training/csv"
+    target_csv_dir = "/app/data/training/csv"
     target_text_path = os.path.join(target_csv_dir, "new_data_text.txt")
     target_image_path = os.path.join(target_csv_dir, "new_data_image.jpg")
 
