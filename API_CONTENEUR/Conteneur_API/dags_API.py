@@ -66,10 +66,11 @@ def integrate_data(**kwargs):
     shutil.move(temp_text_path, target_text_path)
     shutil.move(temp_image_path, target_image_path)
 
+    
 # Définissez votre DAG Airflow
 default_args = {
     'owner': 'admin',
-    'start_date': datetime(2023, 1, 1),
+    'start_date': datetime(2023, 12, 1),
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
