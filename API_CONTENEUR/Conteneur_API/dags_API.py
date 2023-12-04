@@ -4,6 +4,9 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 import os
 import shutil
+import json
+
+timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
 def retrieve_and_save_data(text_data, image_data):
     temp_dir = "/app/temp"
@@ -17,54 +20,115 @@ def retrieve_and_save_data(text_data, image_data):
         image_file.write(image_data)
 
     # Prédiction
-    prdtypecode, thematique = predict(text_data, temp_image_path)
+    prdtypecode = predict(text_data, temp_image_path)
 
-    return temp_text_path, temp_image_path, prdtypecode, thematique
+    # Création d'un fichier JSON avec les informations
+    json_data = {
+        "prdtypecode": prdtypecode,
+        "image_pd": temp_image_path,
+        "description_complete": text_data,
+    }
+    
+    json_path = os.path.join(temp_dir, f"classification_request_{timestamp}.json")
+    with open(json_path, "w") as json_file:
+        json.dump(json_data, json_file)
 
-def validate_and_integrate_data(prediction_result, target_csv_dir="/path/to/training/csv"):
-    temp_text_path, temp_image_path, prdtypecode, thematique = prediction_result
+        
+    return json_path
 
 
-    is_validation_successful = True
+def get_admin_decision(json_data):
+    # Demandez à l'administrateur s'il souhaite valider, modifier la catégorie prdtypecode ou refuser les données
+    user_input = input("Voulez-vous valider les données ? (valider / modifier / refuser): ").lower()
 
-    if is_validation_successful:
-        # Si la validation est réussie, renvoyez le résultat de la prédiction
-        target_text_path = os.path.join(target_csv_dir, "new_data_text.txt")
-        target_image_path = os.path.join(target_csv_dir, "new_data_image.jpg")
-        target_csv_path = os.path.join(target_csv_dir, "training_data.csv")
-
-        # Déplacez ou copiez les fichiers vers le dossier d'entraînement
-        shutil.move(temp_text_path, target_text_path)
-        shutil.move(temp_image_path, target_image_path)
-
-         # Ajoutez les informations dans le fichier CSV
-        with open(target_csv_path, "a", newline='') as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow([text_data, target_image_path, prdtypecode, thematique])
-
-        return {"prdtypecode": prdtypecode, "thematique": thematique, "message": "Validation réussie. Données intégrées."}
+    if user_input == 'valider':
+        return 'validate'
+    elif user_input == 'modifier':
+        return 'modify'
+    elif user_input == 'refuser':
+        return 'refuse'
     else:
-        # Si la validation échoue, vous pouvez prendre des mesures spécifiques ou renvoyer None
-        # Dans cet exemple, les fichiers temporaires ne sont pas déplacés, vous pouvez les supprimer si nécessaire
-        if os.path.exists(temp_text_path):
-            os.remove(temp_text_path)
-        if os.path.exists(temp_image_path):
-            os.remove(temp_image_path)
+        print("Entrée invalide. Veuillez choisir entre valider, modifier ou refuser.")
+        return get_admin_decision(json_data)
 
-        return {"message": "Validation échouée. Données supprimées."} 
 
-def integrate_data(**kwargs):
-    # Logique pour intégrer les données dans le dossier CSV d'entraînement
-    temp_text_path = kwargs['ti'].xcom_pull(task_ids='retrieve_data_task')[0]
-    temp_image_path = kwargs['ti'].xcom_pull(task_ids='retrieve_data_task')[1]
-
+def admin_validation():
+    temp_dir = "/app/temp"
+    files_to_remove = [] 
+    
+    # Si l'administrateur valide, copiez les informations dans le CSV et le dossier d'images
     target_csv_dir = "/app/data/training/csv"
-    target_text_path = os.path.join(target_csv_dir, "new_data_text.txt")
-    target_image_path = os.path.join(target_csv_dir, "new_data_image.jpg")
+    target_csv_path = os.path.join(target_csv_dir, "json_data.csv")
+    # Vous pouvez également copier l'image si nécessaire
+    target_image_dir = "/app/data/training/images"
+    target_image_path = os.path.join(target_image_dir, "validated_image.jpg")
+    
+    # Liste tous les fichiers JSON dans le répertoire temp et les trie
+    json_files = sorted([f for f in os.listdir(temp_dir) if f.endswith(".json")])
 
-    # Déplacez ou copiez les fichiers vers le dossier d'entraînement
-    shutil.move(temp_text_path, target_text_path)
-    shutil.move(temp_image_path, target_image_path)
+    for json_file in json_files:
+        json_path = os.path.join(temp_dir, json_file)
+
+        # Lire les données du fichier JSON
+        with open(json_path, "r") as json_file:
+            json_data = json.load(json_file)
+        # Obtenir la décision de l'administrateur
+        admin_decision = get_admin_decision(json_data)
+
+        if admin_decision == 'validate':
+            
+
+            shutil.copyfile(json_data['description_complete'], target_csv_path)
+            
+            
+            shutil.copyfile(json_data['image_pd'], target_image_path)
+            
+            # Copier les informations avec le prdtypecode modifié dans le CSV
+            with open(target_csv_path, "a", newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerow([json_data['prdtypecode'], json_data['image_pd'], json_data['description_complete']])
+            
+            message = "Validation par l'administrateur effectuée. Données intégrées."
+
+        elif admin_decision == 'modify':
+            # Si l'administrateur souhaite modifier, demandez le nouveau code prdtypecode
+            modified_prdtypecode = input("Entrez le nouveau code prdtypecode (un nombre de jusqu'à 4 chiffres) : ")
+
+            # Le code doit être un nombre et avoir jusqu'à 4 chiffres
+            while not modified_prdtypecode.isdigit() or len(modified_prdtypecode) > 4:
+                print("Code invalide. Veuillez entrer un nombre d'au plus 4 chiffres.")
+                modified_prdtypecode = input("Entrez le nouveau code prdtypecode (un nombre de jusqu'à 4 chiffres) : ")
+
+            # Copier les informations avec le prdtypecode modifié dans le CSV
+            with open(target_csv_path, "a", newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerow([modified_prdtypecode, json_data['image_pd'], json_data['description_complete']])
+
+            # Copier le fichier image dans le dossier d'images
+            target_image_dir = "/app/data/training/images"
+            target_image_path = os.path.join(target_image_dir, f"image_{timestamp}.jpg")
+            shutil.copyfile(json_data['image_pd'], target_image_path)
+
+            # Ajouter la référence de l'image au CSV
+            with open(target_csv_path, "a", newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerow(["", target_image_path, ""])
+
+            message = "Modification de la catégorie prdtypecode effectuée. Données intégrées."
+            
+        elif admin_decision == 'refuse':
+            message = "Validation par l'administrateur refusée. Données non intégrées."
+
+        # Supprimer le fichier JSON une fois la décision prise
+        # Ajoutez le chemin du fichier JSON à la liste pour suppression ultérieure
+        files_to_remove.append(json_path)
+
+        # Supprimez tous les fichiers JSON après le traitement de la boucle
+        for file_path in files_to_remove:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+        return {"admin_decision": admin_decision, "message": message}
 
     
 # Définissez votre DAG Airflow
@@ -78,7 +142,7 @@ default_args = {
 dag = DAG(
     'RECUP_DATA',
     default_args=default_args,
-    schedule_interval=timedelta(weeks=1),  # Déclenchez chaque semaine
+    schedule_interval=timedelta(days=1),  # Déclenchez chaque jour
 )
 
 # Tâche pour récupérer et sauvegarder les données
@@ -89,23 +153,12 @@ retrieve_data_task = PythonOperator(
     dag=dag,
 )
 
-# Tâche pour la validation par l'administrateur
-validate_data_task = PythonOperator(
-    task_id='validate_data_task',
-    python_callable=validate_data,
+admin_validation_task = PythonOperator(
+    task_id='admin_validation_task',
+    python_callable=admin_validation,
     provide_context=True,
     dag=dag,
-)
-
-# Tâche pour intégrer les données dans le dossier d'entraînement
-integrate_data_task = PythonOperator(
-    task_id='integrate_data_task',
-    python_callable=integrate_data,
-    provide_context=True,
-    dag=dag,
-
-
 )
 
 # Définissez l'ordre des tâches
-retrieve_data_task >> validate_data_task >> integrate_data_task
+retrieve_data_task >> admin_validation_task
