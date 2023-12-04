@@ -1,1 +1,32 @@
+name: Predict_test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-auth-route:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Download Model from Google Drive
+      run: |
+        curl -L "https://drive.google.com/uc?export=download&id=1LgATG-amQRVQzXPi7MWaCgLhKP03VAL1" -o model/combined_model_trained_after_resume.h5
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r API_CONTENEUR/Conteneur_API/requirements.txt
+
+    - name: Run Predict_test
+      run: pytest API_CONTENEUR/Conteneur_API/prediction_test.py
 
