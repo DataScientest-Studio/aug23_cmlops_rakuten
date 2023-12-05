@@ -5,6 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 import os
 import shutil
 import json
+from script_de_prediction import predict, preprocess_text, preprocess_image
 
 timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -20,7 +21,7 @@ def retrieve_and_save_data(text_data, image_data):
         image_file.write(image_data)
 
     # Prédiction
-    prdtypecode = predict(text_data, temp_image_path)
+    prdtypecode = predict(temp_text_path, temp_image_path)
 
     # Création d'un fichier JSON avec les informations
     json_data = {
@@ -32,8 +33,7 @@ def retrieve_and_save_data(text_data, image_data):
     json_path = os.path.join(temp_dir, f"classification_request_{timestamp}.json")
     with open(json_path, "w") as json_file:
         json.dump(json_data, json_file)
-
-        
+    
     return json_path
 
 
@@ -57,11 +57,11 @@ def admin_validation():
     files_to_remove = [] 
     
     # Si l'administrateur valide, copiez les informations dans le CSV et le dossier d'images
-    target_csv_dir = "/app/data/training/csv"
-    target_csv_path = os.path.join(target_csv_dir, "json_data.csv")
+    target_csv_dir = "/Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/Df_Encoded_test.csv:/app/data"
+    target_csv_path = os.path.join(target_csv_dir, "Df_Encoded_test.csv")
     # Vous pouvez également copier l'image si nécessaire
-    target_image_dir = "/app/data/training/images"
-    target_image_path = os.path.join(target_image_dir, "validated_image.jpg")
+    target_image_dir = "/Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data"
+    target_image_path = os.path.join(target_image_dir, "224_X_Train_4D.npy")
     
     # Liste tous les fichiers JSON dans le répertoire temp et les trie
     json_files = sorted([f for f in os.listdir(temp_dir) if f.endswith(".json")])
@@ -76,17 +76,22 @@ def admin_validation():
         admin_decision = get_admin_decision(json_data)
 
         if admin_decision == 'validate':
-            
-
-            shutil.copyfile(json_data['description_complete'], target_csv_path)
-            
-            
+            # Prétraiter le texte
+            preprocessed_text = preprocess_text(json_data['description_complete'])
+            # Prétraiter l'image
+            preprocessed_image = preprocess_image(json_data['image_pd'])
+             
             shutil.copyfile(json_data['image_pd'], target_image_path)
             
             # Copier les informations avec le prdtypecode modifié dans le CSV
             with open(target_csv_path, "a", newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
-                csv_writer.writerow([json_data['prdtypecode'], json_data['image_pd'], json_data['description_complete']])
+                csv_writer.writerow([json_data['prdtypecode'], json_data['image_pd'], preprocessed_text])
+            
+            # Copier les informations avec le prdtypecode modifié dans le npy
+            with open(target_image_path, "a", newline='') as np_file:
+                np_writer = np.writer(np_file)
+                np_writer.writerow([json_data['image_pd'], preprocessed_image])
             
             message = "Validation par l'administrateur effectuée. Données intégrées."
 
@@ -99,13 +104,18 @@ def admin_validation():
                 print("Code invalide. Veuillez entrer un nombre d'au plus 4 chiffres.")
                 modified_prdtypecode = input("Entrez le nouveau code prdtypecode (un nombre de jusqu'à 4 chiffres) : ")
 
+            # Prétraiter le texte
+            preprocessed_text = preprocess_text(json_data['description_complete'])
+            # Prétraiter l'image
+            preprocessed_image = preprocess_image(json_data['image_pd']) 
+            
             # Copier les informations avec le prdtypecode modifié dans le CSV
             with open(target_csv_path, "a", newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
-                csv_writer.writerow([modified_prdtypecode, json_data['image_pd'], json_data['description_complete']])
+                csv_writer.writerow([modified_prdtypecode, json_data['image_pd'], preprocessed_text])
 
             # Copier le fichier image dans le dossier d'images
-            target_image_dir = "/app/data/training/images"
+            target_image_dir = "/Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data"
             target_image_path = os.path.join(target_image_dir, f"image_{timestamp}.jpg")
             shutil.copyfile(json_data['image_pd'], target_image_path)
 
@@ -113,6 +123,11 @@ def admin_validation():
             with open(target_csv_path, "a", newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
                 csv_writer.writerow(["", target_image_path, ""])
+                
+            # Copier les informations avec le prdtypecode modifié dans le npy
+            with open(target_image_path, "a", newline='') as np_file:
+                np_writer = np.writer(np_file)
+                np_writer.writerow([json_data['image_pd'], preprocessed_image])
 
             message = "Modification de la catégorie prdtypecode effectuée. Données intégrées."
             
