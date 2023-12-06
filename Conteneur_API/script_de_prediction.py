@@ -4,6 +4,8 @@ from keras.applications.resnet50 import preprocess_input, ResNet50
 from PIL import Image
 import numpy as np
 
+
+
 # Charger le tokenizer BERT
 tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 

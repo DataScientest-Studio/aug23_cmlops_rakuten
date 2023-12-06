@@ -3,19 +3,21 @@ version: '3.8'
 
 # Déclare les services qui font partie de cette application.
 services:
-  # Définition du service pour l'API.
+  
   api:
     build:
       context: ./Conteneur_API
       # Chemin vers le Dockerfile pour construire l'image du service API.
       dockerfile: ../Dockerfile/API/Dockerfile
     ports:
-      - "8000:8000"  # Fait correspondre le port 8000 du conteneur au port 8000 de l'hôte.
+      - "8000:8000"  
     volumes:
       # Montage d'un volume pour accéder au modèle depuis l'hôte.
       - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/combined_model_trained_after_resume.h5:/app/models/combined_model_trained_after_resume.h5
+      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data/224_X_Train_4D.npy
+      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR_V2/CSV_Rakuten_MLOPS.csv:/app/data/CSV_Rakuten_MLOPS.csv
     networks:
-      - my-network  # Connecte ce service au réseau 'my-network'.
+      - my-network  
 
   # Définition du service pour la base de données utilisateurs.
   users-db:
@@ -23,7 +25,7 @@ services:
       context: ./Conteneur_BDD_utilisateur
       dockerfile: ../Dockerfile/BDD_utilisateur/Dockerfile
     ports:
-      - "8001:8001"  # Port du service base de données utilisateurs.
+      - "8001:8001"  
     networks:
       - my-network
 
@@ -33,7 +35,7 @@ services:
       context: ./Conteneur_Entrainement
       dockerfile: ../Dockerfile/Entrainement/Dockerfile
     ports:
-      - "5001:5001"  # Port du service d'entraînement.
+      - "5001:5001"  
     volumes:
       # Montage de volumes pour accéder aux données d'entraînement.
       - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data/224_X_Train_4D.npy
@@ -41,10 +43,28 @@ services:
     networks:
       - my-network
 
+  airflow:
+    image: apache/airflow:2.1.2
+    environment:
+    - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+    - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+    - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    - AIRFLOW__WEBSERVER__AUTHENTICATE=False
+    volumes:
+    - ./Conteneur_Airflow/dags:/opt/airflow/dags
+    - ./Conteneur_Airflow/logs:/opt/airflow/logs
+    - ./Conteneur_Airflow/plugins:/opt/airflow/plugins
+    ports:
+    - "8080:8080"
+    command: >
+      bash -c "airflow db init && airflow scheduler & airflow webserver"
+    networks:
+    - my-network
+
 # Déclaration et configuration du réseau utilisé par les services.
 networks:
   my-network:
-    driver: bridge  # Utilise le driver 'bridge' pour la communication entre les conteneurs.
+    driver: bridge  
 
 
 

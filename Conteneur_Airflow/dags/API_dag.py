@@ -1,11 +1,15 @@
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python import PythonOperator
 import os
 import shutil
 import json
-from script_de_prediction import predict, preprocess_text, preprocess_image
+import numpy as np
+import csv 
+import requests
+
+
+
 
 timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -175,5 +179,5 @@ admin_validation_task = PythonOperator(
     dag=dag,
 )
 
-# Définissez l'ordre des tâches
+
 retrieve_data_task >> admin_validation_task
