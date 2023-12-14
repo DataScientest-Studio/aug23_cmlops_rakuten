@@ -1,72 +1,88 @@
-# Spécifie la version de la syntaxe Docker Compose utilisée.
 version: '3.8'
 
-# Déclare les services qui font partie de cette application.
 services:
-  
+  rclone:
+    build:
+      context: ./Dockerfile/Rclone/
+    command: ["/bin/sh", "/copy_files.sh"]
+    volumes:
+      - shared-data:/drive   
+    networks:
+      - my-network
+
   api:
     build:
       context: ./Conteneur_API
-      # Chemin vers le Dockerfile pour construire l'image du service API.
       dockerfile: ../Dockerfile/API/Dockerfile
     ports:
       - "8000:8000"  
+    depends_on:
+      - rclone
     volumes:
-      # Montage d'un volume pour accéder au modèle depuis l'hôte.
-      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/combined_model_trained_after_resume.h5:/app/models/combined_model_trained_after_resume.h5
-      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data/224_X_Train_4D.npy
-      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR_V2/CSV_Rakuten_MLOPS.csv:/app/data/CSV_Rakuten_MLOPS.csv
+      - shared-data:/app/drive
+      - data:/app/data 
+    command: /bin/sh -c "/setup_volume.sh && uvicorn main:app --host 0.0.0.0"
+
+
     networks:
       - my-network  
 
-  # Définition du service pour la base de données utilisateurs.
   users-db:
     build:
       context: ./Conteneur_BDD_utilisateur
       dockerfile: ../Dockerfile/BDD_utilisateur/Dockerfile
+    depends_on:
+      - rclone
     ports:
       - "8001:8001"  
     networks:
       - my-network
 
-  # Définition du service pour l'entraînement.
   entrainement:
     build:
       context: ./Conteneur_Entrainement
       dockerfile: ../Dockerfile/Entrainement/Dockerfile
+    command: mlflow server --host 0.0.0.0 --port 5001
+    depends_on:
+    - rclone
     ports:
-      - "5001:5001"  
+    - "5001:5001"
     volumes:
-      # Montage de volumes pour accéder aux données d'entraînement.
-      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/224_X_Train_4D.npy:/app/data/224_X_Train_4D.npy
-      - /Users/flavien/Desktop/API_RAKUTEN/API_CONTENEUR/Df_Encoded_test.csv:/app/data/Df_Encoded_test.csv
-    networks:
-      - my-network
-
-  airflow:
-    image: apache/airflow:2.1.2
-    environment:
-    - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
-    - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
-    - AIRFLOW__CORE__LOAD_EXAMPLES=False
-    - AIRFLOW__WEBSERVER__AUTHENTICATE=False
-    volumes:
-    - ./Conteneur_Airflow/dags:/opt/airflow/dags
-    - ./Conteneur_Airflow/logs:/opt/airflow/logs
-    - ./Conteneur_Airflow/plugins:/opt/airflow/plugins
-    ports:
-    - "8080:8080"
-    command: >
-      bash -c "airflow db init && airflow scheduler & airflow webserver"
+    - shared-data:/app/drive
+    - ./Conteneur_Entrainement/mlflow.db:/app/mlflow.db
     networks:
     - my-network
 
-# Déclaration et configuration du réseau utilisé par les services.
+
+  airflow:
+    image: apache/airflow:2.1.2
+    
+    volumes:
+      - ./Conteneur_Airflow/dags:/opt/airflow/dags
+      - ./Conteneur_Airflow/logs:/opt/airflow/logs
+      - ./Conteneur_Airflow/plugins:/opt/airflow/plugins
+      - ./Conteneur_Airflow/airflow.cfg:/opt/airflow/airflow.cfg
+      - shared-data:/app/drive
+      - data:/app/data 
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "airflow db init &&
+      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com &&
+      airflow scheduler & airflow webserver"
+    networks:
+      - my-network
+
+
+volumes:
+  shared-data:
+    driver: local
+  data:
+    driver: local
+
 networks:
   my-network:
-    driver: bridge  
-
-
+    driver: bridge
 
 
 
