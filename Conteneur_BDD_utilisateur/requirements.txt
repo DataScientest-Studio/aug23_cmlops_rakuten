@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-passlib
-python-multipart
-PyJWT
-pytest
-httpx
