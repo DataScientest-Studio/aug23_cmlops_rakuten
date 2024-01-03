@@ -86,17 +86,17 @@ Dans ce cas, refaites la commande précédente.
  ## Connection aux différentes API
  Connection à Swagger:
  L'API sera disponible à l'adresse http://localhost:8000/docs
-      Deux possibilités pour vous connecter:
-      "customer" : password "secret63" (accès à une seule route "predict")
-      "admin" : password "admin63" (accès à toutes les routes)
+ Deux possibilités pour vous connecter:
+ "customer" : password "secret63" (accès à une seule route "predict")
+ "admin" : password "admin63" (accès à toutes les routes)
 
  Connection à Airflow:
  Vous pouvez accéder à Airflow à l'adresse http://localhost:8080
-     Connection uniquement pour l'admin:
-     "admin" : "admin"
+ Connection uniquement pour l'admin:
+ "admin" : "admin"
 
  ## Effectuer une classification de produit
- Quand vous êtes identifié, déplacez-vous sur la route prédict où vous trouverez le bouton "try it out", cliquez dessus pour faire apparaître la demande de la désignation   
+ Quand vous êtes identifié, déplacez-vous sur la route "predict" où vous trouverez le bouton "try it out", cliquez dessus pour faire apparaître la demande de la désignation 
  du texte et de l'image.
  Entrez un texte et téléchargez l'image puis appuyer sur le bouton "execute".
  La désignation sera prédite avec un prdtypecode et la thèmatique du produit.
@@ -104,4 +104,22 @@ Dans ce cas, refaites la commande précédente.
  Après cette opération, il vous faudra obligatoirement être connecté commme administrateur pour avoir accès aux autres routes.
 
  ## Effectuer une vérification de la prédiction
- 
+ Dépacez vous sur la route "list_temp_data" et appuyez sur le bouton "try it out", et appuyez sur le bouton "execute".
+ Dans la cellule reponse Body, vous trouverez la désignation, le numéro de l'image dans colonne "img_pd", et la prédiction.
+ Pour visualiser l'image, veuillez copier l'URL et le collez dans votre navigateur.
+
+ ## Validation des prédictions
+ Copiez le numéro img_pd de la vérification de la prédiction précédente.
+ ex: ef1438b3-2a46-4279-8f2f-35c23e291329
+ Déplacez-vous sur la route "validation_prédiction".
+ Appuyez sur le bouton "try it out", collez le numéro dans la case "filename", utiliser le menu déroulant de validation "True" pour accepter, "False" pour refuser, ensuite 
+ appuyez sur le bouton "execute".
+ Si vous validez en "True", cela déclenche un dag qui ajoute les données automatiquement au fichier image_4D, et au fichier .csv qui seront utilisé pour l'entrainement du 
+ modèle.
+
+ ## Modification des prédictions
+ Pour modifier le prdtypecode, appuyer sur le bouton "try it out", coller le numéro img_pd dans filename de la route "modify_json".
+ Indiquer le prdtypecode qui convient au texte et à l'image.
+ Appuyez sur "execute".
+ Le prdtypecode sera modifié.
+
