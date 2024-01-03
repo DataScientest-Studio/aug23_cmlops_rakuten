@@ -41,7 +41,6 @@ Ces dernières étaient trop volumineuses pour être acceuillies sur notre espac
 Cependant, vous pouvez les télécharger sur le site [challengedata](https://challengedata.ens.fr/challenges/35).
 Après vous êtes enregistré, vous pourrez accéder aux 4 fichiers composants les données.
 * X_train_update.csv
-* X_test_update.csv
 * Y_train_CVw08PX.csv
 * Le dossier contenant toutes les images
 Dans notre projet, les données ont été imagé et entré dans le contenaire "Données".
