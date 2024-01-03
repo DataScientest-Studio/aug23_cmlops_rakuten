@@ -86,6 +86,7 @@ Dans ce cas, refaites la commande précédente.
  ## Connection aux différentes API
  Connection à Swagger:
  L'API sera disponible à l'adresse http://localhost:8000/docs
+ <br>
  Deux possibilités pour vous connecter:
  "customer" : password "secret63" (accès à une seule route "predict")
  "admin" : password "admin63" (accès à toutes les routes)
