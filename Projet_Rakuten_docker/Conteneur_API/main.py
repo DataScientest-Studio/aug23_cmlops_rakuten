@@ -80,7 +80,40 @@ def verify_token(token: str):
 
 
 def require_role(*allowed_roles):
+    """
+    Crée un décorateur pour vérifier si l'utilisateur possède les rôles autorisés.
+
+    Args:
+        *allowed_roles (str): Les rôles autorisés pour accéder à la route.
+
+    Returns:
+        Callable: Une fonction asynchrone qui vérifie les rôles de l'utilisateur et lève une exception HTTP 403 (Accès interdit)
+        s'il n'a pas les rôles autorisés.
+
+    Example:
+        Utilisez cette fonction comme décorateur pour restreindre l'accès à une route spécifique aux rôles autorisés. Par exemple :
+
+        @app.post("/admin_only_route", include_in_schema=False)
+        async def admin_only_route(payload: dict = Depends(require_role("admin"))):
+            return {"message": "Accès administrateur autorisé"}
+
+        Dans cet exemple, seuls les utilisateurs avec le rôle "admin" auront accès à la route "/admin_only_route".
+    """
     async def role_checker(credentials: HTTPBasicCredentials = Depends(security)):
+        """
+    Vérifie les rôles de l'utilisateur à partir des informations d'identification de base HTTP.
+
+    Args:
+        credentials (HTTPBasicCredentials): Les informations d'identification de base HTTP de l'utilisateur.
+
+    Returns:
+        dict: Un dictionnaire contenant les informations du token utilisateur si les rôles sont autorisés.
+
+    Raises:
+        HTTPException: Si l'utilisateur n'a pas les rôles autorisés, une exception HTTP 403 (Accès interdit) est levée
+        avec un détail indiquant que l'accès n'est pas autorisé pour ce rôle.
+        """
+
         token = await get_token(credentials)
         payload = verify_token(token)
         if payload.get("role") not in allowed_roles:
