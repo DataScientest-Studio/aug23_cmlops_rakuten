@@ -128,13 +128,11 @@ def require_role(*allowed_roles):
 
 @app.post("/admin_only_route", include_in_schema=False)
 async def admin_only_route(payload: dict = Depends(require_role("admin"))):
+    """
+    Route pour accéder à des fonctionnalités réservées aux administrateurs.
     
     return {"message": "Accès administrateur autorisé"}
-
-
-
-
-
+    """
 
 @app.post("/predict")
 async def predict_endpoint(
