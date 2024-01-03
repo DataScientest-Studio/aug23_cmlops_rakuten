@@ -21,7 +21,7 @@ services:
     volumes:
       - shared-data:/app/drive
       - data:/app/data
-    command: /bin/sh -c "sleep 35 && /setup_volume.sh && uvicorn main:app --host 0.0.0.0"
+    command: /bin/sh -c "sleep 90 && /setup_volume.sh && uvicorn main:app --host 0.0.0.0"
     networks:
       - my-network  
 
