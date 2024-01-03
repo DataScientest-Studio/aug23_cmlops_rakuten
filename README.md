@@ -48,9 +48,60 @@ Dans notre projet, les données ont été imagé et entré dans le contenaire "D
 ## **API**
    ## API de Classification de Produits
 
-Bienvenue dans l'API de Classification de Produits. Cette API permet de classer un produit en fonction d'une image et d'une description textuelle.
+Bienvenue dans les APIs de Classification de Produits. Elles permettent de classer un produit en fonction d'une image et d'une description textuelle.
+L'administrateur peut quand à lui vérifier que la prédiction est bonne ou mauvaise, la modifier ou la supprimer. Les données prédites seront enregistrés dans une base de données qui sera utilisé pour l'amélioration continue du modèle.
 
    ## Installation
 
-! En cours de construction !
+1. Clonez ce dépôt Git sur votre ordinateur:
 
+   ```bash
+   git clone https://github.com/DataScientest-Studio/aug23_cmlops_rakuten.git
+   ```
+2. Vérifier que vous avez le logiciel Docker soit ouvert sur votre machine.
+   
+3. Accédez au répertoire du projet :
+
+   ```bash
+   cd aug23_cmlops_rakuten/Projet_Rakuten_docker
+   ```
+   
+4. Vérifier que vous êtes à l'intérieur du répertoire en tapant la commande et voyez le fichier 'docker-compose.yaml':
+
+   ```bash
+   ls
+   ```
+
+5. Lancez l'application à l'aide de la commande suivante :
+
+   ```bash
+   docker-compose up
+   ```
+
+A la suite de cette commande, l'installation peut prendre une dizaine de minutes pour installer les images.
+Il se peut que vous rencontriez un dysfonctionnement concernant l'image Apache/Airflow 2.4, le message d'erreur sera qu'il ne trouve pas l'image.
+Dans ce cas, refaites la commande précédente.
+  
+
+ ## Connection aux différentes API
+ Connection à Swagger:
+ L'API sera disponible à l'adresse http://localhost:8000/docs
+      Deux possibilités pour vous connecter:
+      "customer" : password "secret63" (accès à une seule route "predict")
+      "admin" : password "admin63" (accès à toutes les routes)
+
+ Connection à Airflow:
+ Vous pouvez accéder à Airflow à l'adresse http://localhost:8080
+     Connection uniquement pour l'admin:
+     "admin" : "admin"
+
+ ## Effectuer une classification de produit
+ Quand vous êtes identifié, déplacez-vous sur la route prédict où vous trouverez le bouton "try it out", cliquez dessus pour faire apparaître la demande de la désignation   
+ du texte et de l'image.
+ Entrez un texte et téléchargez l'image puis appuyer sur le bouton "execute".
+ La désignation sera prédite avec un prdtypecode et la thèmatique du produit.
+
+ Après cette opération, il vous faudra obligatoirement être connecté commme administrateur pour avoir accès aux autres routes.
+
+ ## Effectuer une vérification de la prédiction
+ 
