@@ -80,7 +80,14 @@ A la suite de cette commande, l'installation peut prendre une dizaine de minutes
 <br>
 Il se peut que vous rencontriez un dysfonctionnement concernant l'image Apache/Airflow 2.4, le message d'erreur sera qu'il ne trouve pas l'image.
 <br>
-Dans ce cas, refaites la commande précédente.
+Dans ce cas, allez sur l'onglet "Container", faites "stop" sur docker desktop de tout les containers, une fois tout arrêté, effacer le container Airflow, 
+<br>
+puis aller à l'onglet "Image", effacer l'image Airflow.
+<br>
+Une fois les instructions précédentes effectuées, refaites la commande suivante:
+   ```bash
+   docker-compose up
+   ```
   
 
  ## Connection aux différentes API
@@ -144,3 +151,11 @@ Dans ce cas, refaites la commande précédente.
  <br>
  Le prdtypecode sera modifié.
 
+## **AIRFLOW**
+## Connection à Airflow
+ Connection à Airflowr:
+ Airflow sera disponible à l'adresse http://localhost:8080
+ <br>
+ Vous pouvez vous connecter uniquement en tant qu'administrateur
+ <br>
+ "admin" : password "admin"
