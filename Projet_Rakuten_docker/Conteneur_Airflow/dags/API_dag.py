@@ -8,6 +8,24 @@ import os
 import pandas as pd
 import numpy as np
 
+"""
+Script Apache Airflow pour fusionner des fichiers CSV et NPY dans un DAG.
+
+Ce script crée un DAG nommé 'api_dag' utilisant Apache Airflow. Le DAG comprend une tâche
+appelée 'merge_files_conteneur_api' qui ajoute les nouvelles données dans les fichiers CSV et NPY dans le répertoire
+'/app/data' aux fichiers existants. Une fois la fusion effectuée, les fichiers traités
+sont supprimés.
+
+Le script utilise des fonctions telles que merge_files_conteneur_api pour effectuer la fusion,
+supprimer les fichiers traités et afficher des informations de débogage.
+
+Note :
+    - Assurez-vous d'avoir les modules requis installés.
+    - Les déclarations print utilisées pour le débogage peuvent être désactivées
+      en production.
+    - Ce script suppose une structure de fichier spécifique dans '/app/data'.
+
+"""
 # Définir les arguments par défaut pour le DAG
 default_args = {
     'owner': 'admin',
