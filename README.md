@@ -153,5 +153,5 @@ Une fois les instructions précédentes effectuées, refaites la commande suivan
   Vous trouverez trois dags, mais vous en verrez que deux d'affiché.
   - API_DAG : DAG automatique déclenché après la validation du service labelisation des nouvelles données à entrer pour l'entrainement du modèle.
   - Test_dag :  DAG automatique déclenché à l'authenfication.
-  - Enfin, il n'apparait pas sur Airflow mais il existe un DAG automatique qui permet de transfèrer le nouveau modèle validé par l'administrateur de MLFlow vers le volume contenant le précédent modèle. Le déclenchement automatique a été commenté afin de sécuriser le modèle actuel, vous pouvez cependant le décommenter pour en faire l'essai. 
+  - Enfin, il n'apparait pas sur Airflow mais il existe un DAG automatique qui permet de transfèrer le nouveau modèle de fusion, validé par l'administrateur, de MLFlow vers le volume contenant le précédent modèle. Le déclenchement automatique a été commenté afin de sécuriser le modèle actuel, vous pouvez cependant le décommenter pour en faire l'essai une fois décommenté, il apparaitra dans Airflow. 
  
