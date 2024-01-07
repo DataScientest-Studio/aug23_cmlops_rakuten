@@ -80,9 +80,7 @@ A la suite de cette commande, l'installation peut prendre une dizaine de minutes
 <br>
 Il se peut que vous rencontriez un dysfonctionnement concernant l'image Apache/Airflow 2.4, le message d'erreur sera qu'il ne trouve pas l'image.
 <br>
-Dans ce cas, allez sur l'onglet "Container", faites "stop" sur docker desktop de tout les containers, une fois tout arrêté, effacer le container Airflow, 
-<br>
-puis aller à l'onglet "Image", effacer l'image Airflow.
+Dans ce cas, allez sur l'onglet "Container", faites "stop" sur docker desktop de tout les containers, une fois tout arrêté, effacer le container Airflow, puis aller à l'onglet "Image", effacer l'image Airflow.
 <br>
 Une fois les instructions précédentes effectuées, refaites la commande suivante:
    ```bash
@@ -99,14 +97,6 @@ Une fois les instructions précédentes effectuées, refaites la commande suivan
  "customer" : password "secret63" (accès à une seule route "predict")
  <br>
  "admin" : password "admin63" (accès à toutes les routes)
-
- Connection à Airflow:
- <br>
- Vous pouvez accéder à Airflow à l'adresse http://localhost:8080
- <br>
- Connection uniquement pour l'admin:
- <br>
- "admin" : "admin"
 
  ## Effectuer une classification de produit
  Quand vous êtes identifié, déplacez-vous sur la route "predict" où vous trouverez le bouton "try it out", cliquez dessus pour faire apparaître la demande de la désignation 
@@ -153,9 +143,15 @@ Une fois les instructions précédentes effectuées, refaites la commande suivan
 
 ## **AIRFLOW**
 ## Connection à Airflow
- Connection à Airflowr:
- Airflow sera disponible à l'adresse http://localhost:8080
+ Vous pouvez accéder à Airflow à l'adresse http://localhost:8080
  <br>
- Vous pouvez vous connecter uniquement en tant qu'administrateur
+ Connection uniquement pour l'admin:
  <br>
- "admin" : password "admin"
+ "admin" : "admin"
+
+## Utilisation des Dags
+  Vous trouverez trois dags, mais vous en verrez que deux d'affiché.
+  - API_DAG : DAG automatique déclenché après la validation du service labelisation des nouvelles données à entrer pour l'entrainement du modèle.
+  - Test_dag :  DAG automatique déclenché à l'authenfication.
+  - Enfin, il n'apparait pas sur Airflow mais il existe un DAG automatique qui permet de transfèrer le nouveau modèle validé par l'administrateur de MLFlow vers le volume contenant le précédent modèle. Le déclenchement automatique a été commenté afin de sécuriser le modèle actuel, vous pouvez cependant le décommenter pour en faire l'essai. 
+ 
