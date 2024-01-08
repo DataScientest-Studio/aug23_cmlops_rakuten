@@ -19,6 +19,15 @@ sont supprimés.
 Le script utilise des fonctions telles que merge_files_conteneur_api pour effectuer la fusion,
 supprimer les fichiers traités et afficher des informations de débogage.
 
+Arguments par défaut :
+    owner (str): Propriétaire du DAG.
+    depends_on_past (bool): Indique si une tâche doit dépendre de l'exécution réussie de la précédente.
+    start_date (datetime): Date de début d'exécution du DAG.
+    email_on_failure (bool): Indique si les notifications par e-mail doivent être envoyées en cas d'échec.
+    email_on_retry (bool): Indique si les notifications par e-mail doivent être envoyées lors d'une tentative de réexécution.
+    retries (int): Nombre de tentatives de réexécution en cas d'échec d'une tâche.
+    retry_delay (timedelta): Délai entre les tentatives de réexécution.
+
 Note :
     - Assurez-vous d'avoir les modules requis installés.
     - Les déclarations print utilisées pour le débogage peuvent être désactivées
