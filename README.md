@@ -153,5 +153,5 @@ Une fois les instructions précédentes effectuées, refaites la commande suivan
   Vous trouverez trois dags, mais vous en verrez que deux d'affichés.
   - API_dag : DAG automatique déclenché après la validation du service labelisation des nouvelles données à entrer pour l'entrainement du modèle.
   - control_dag :  DAG automatique déclenché à l'authenfication.
-  - Enfin, il n'apparait pas sur Airflow mais il existe un DAG automatique qui permet de transfèrer le nouveau modèle de fusion transfer_model_dag, validé par l'administrateur, de MLFlow vers le volume contenant le précédent modèle. Le déclenchement automatique a été commenté afin de sécuriser le modèle actuel, vous pouvez cependant le décommenter pour en faire l'essai une fois décommenté, il apparaitra dans Airflow. 
+  - Enfin, il n'apparait pas sur Airflow mais il existe un DAG automatique qui permet de transfèrer le nouveau modèle de fusion transfer_model_dag, validé par l'administrateur, de MLFlow vers le volume contenant le précédent modèle. Celui-ci à un déclenchement automatique, nous n'avons pas les ressources techniques nécessaires pour le faire fonctionner, nous l'avons donc laisser en commenté. Il nous aurait fallu déplacer le projet sur un Cloud AWS pour le mettre en fonction.
  
