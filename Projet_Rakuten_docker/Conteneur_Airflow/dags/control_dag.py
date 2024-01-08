@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 DAG de test pour l'authentification
 
 Ce DAG, nommé 'test_dag', a été conçu pour effectuer un test d'authentification en exécutant
-le script 'authentification_test.py' situé dans '/app/data2/'. Il utilise Apache Airflow pour
+le script 'authentification_test.py' situé dans '/app/data/'. Il utilise Apache Airflow pour
 planifier et exécuter cette tâche de test.
 
 Arguments par défaut :
@@ -54,7 +54,7 @@ dag = DAG(
 
 def run_authentification_test():
     import subprocess
-    result = subprocess.run(['python', '/app/data2/authentification_test.py'], capture_output=True)
+    result = subprocess.run(['python', '/app/data/authentification_test.py'], capture_output=True)
     if result.returncode != 0:
         raise Exception(f"Erreur lors de l'exécution du test d'authentification : {result.stderr}")
     print(result.stdout.decode('utf-8'))
